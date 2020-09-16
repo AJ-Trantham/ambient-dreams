@@ -1,18 +1,19 @@
 ## Team Name: Voltron
 
-## Project Name: Ambient Dreams
+## Project Name: TBD
 
 ## Project Description:
-TBD (e.g., build a TBD app for TBD)
+The goal of this project is to create a VST plugin for use with DAWs (Digital Audio Workstation). The plugin will be an ambient synth pad to aid in music production and live performances. It will provide functionality for every key and grant the user control over key/pitch, tone, shape and others. 
 
 ## Team Members:
 
 Last Name       | First Name      | GitHub User Name     | Scrum Role
 --------------- | --------------- | -------------------- | ---------------
-Burt            | Forrest         | ForrestBurt          | Scrum Master
-Koehler         | Joel            | joelkoehler          | Product Owner
-Martin          | John            | john-with-an-h       | Developer
-Trantham        | AJ              | AJ-Trantham          | Developer
+Trantham        | AJ              |                      | TBDDeveloper
+TBD             | TBD             | TBD                  | TBDScrum Master
+TBD             | TBD             | TBD                  | TBDProduct Owner
+TBD             | TBD             | TBD                  | TBD
+TBD             | TBD             | TBD                  | TBD
 
 ## :eyes: :memo: Scrum Linter Reports:
 Access the [Scrum Linter Report](http://cs.boisestate.edu/~bdit/ScrumLinter/CS471F20ScrumLinterReports/CS471-F20-Team9_S1PbT3y0k3GJxjCc7CxaVcDVplENPKlh1OLQLtrX/). A new report will be automatically generated every few hours.
