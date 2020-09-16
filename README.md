@@ -9,7 +9,7 @@ TBD (e.g., build a TBD app for TBD)
 
 Last Name       | First Name      | GitHub User Name     | Scrum Role
 --------------- | --------------- | -------------------- | ---------------
-TBD             | TBD             | TBD                  | TBDDeveloper
+Trantham        | AJ              |                      | TBDDeveloper
 TBD             | TBD             | TBD                  | TBDScrum Master
 TBD             | TBD             | TBD                  | TBDProduct Owner
 TBD             | TBD             | TBD                  | TBD
