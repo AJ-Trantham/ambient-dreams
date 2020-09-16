@@ -1,6 +1,6 @@
 ## Team Name: Voltron
 
-## Project Name: TBD
+## Project Name: Ambient Dreams
 
 ## Project Description:
 TBD (e.g., build a TBD app for TBD)
