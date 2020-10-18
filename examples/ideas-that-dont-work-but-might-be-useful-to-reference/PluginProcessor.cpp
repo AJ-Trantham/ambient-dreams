@@ -80,12 +80,14 @@ void VoltronAudioProcessor::changeProgramName (int index, const juce::String& ne
 //==============================================================================
 void VoltronAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // set up the tone generator
-    toneGenRoot.setAmplitude(1.0);
-    toneGenRoot.setFrequency(440.00); // sets this tone generator to an A note. We will want 2 other tone generators for the 3 and 5 likely
-    toneGenRoot.prepareToPlay(sampleRate, samplesPerBlock);
+    /*// set up the tone generator
+    toneGen.setAmplitude(1.0);
+    toneGen.setFrequency(440.00);
+    toneGen.prepareToPlay(sampleRate, samplesPerBlock); */
     
-    //synth.setCurrentPlaybackSampleRate(sampleRate);
+    int lastSampleRate = sampleRate;
+
+    synth.setCurrentPlaybackSampleRate(sampleRate);
     reverb.setSampleRate(sampleRate);
 }
 
@@ -93,7 +95,7 @@ void VoltronAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
-    toneGenRoot.releaseResources();
+    toneGen.releaseResources();
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -106,7 +108,8 @@ bool VoltronAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) 
 
 void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    
+    // I will want to wrap this in some synth object rather than using the stright up ToneGeneratorAudioSource class
+    //toneGen.getNextAudioBlock(juce::AudioSourceChannelInfo(buffer));
 
     //loadNewSample(&buffer, "ogg");
 
@@ -115,15 +118,13 @@ void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
 
     /*SynthesiserSound::Ptr newSound = new SamplerSound();
     sound = newSound;
-    synth.addSound(sound)
+    synth.addSound(sound);*/
 
     MidiMessage message = MidiMessage::noteOn(1, 5, (uint8)100);
-    midiMessages.addEvent(message, 0);*/
+    midiMessages.addEvent(message, 0);
 
     reverb.setParameters(reverbParameters);
-    //synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
-    // using the tone generator
-    toneGenRoot.getNextAudioBlock(juce::AudioSourceChannelInfo(buffer));
+    synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
 
     if (getMainBusNumOutputChannels() == 1)
         reverb.processMono(buffer.getWritePointer(0), buffer.getNumSamples());
@@ -164,3 +165,4 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new VoltronAudioProcessor();
 } 
+

@@ -71,7 +71,7 @@ private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(VoltronAudioProcessor);
     AudioFormatManager formatManager;
-    ToneGeneratorAudioSource toneGen;
+    ToneGeneratorAudioSource toneGenRoot;
     Reverb reverb;
     Synthesiser synth;
     SynthesiserSound::Ptr sound;
