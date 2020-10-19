@@ -82,7 +82,7 @@ void VoltronAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
 {
     // set up the tone generator
     toneGenRoot.setAmplitude(1.0);
-    toneGenRoot.setFrequency(440.00); // sets this tone generator to an A note. We will want 2 other tone generators for the 3 and 5 likely
+    toneGenRoot.setFrequency(440); //somehow this needs to be programmatically set from the slider
     toneGenRoot.prepareToPlay(sampleRate, samplesPerBlock);
     
     //synth.setCurrentPlaybackSampleRate(sampleRate);
@@ -164,3 +164,4 @@ juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new VoltronAudioProcessor();
 } 
+
