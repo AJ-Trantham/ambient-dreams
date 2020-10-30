@@ -18,7 +18,10 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (VoltronAudioProc
     frequencySlider.setRange(50, 5000.0);         
     frequencySlider.setTextValueSuffix(" Hz");     
     frequencySlider.setValue(500.0);
-    frequencySlider.addListener(this);     
+    frequencySlider.addListener(this); 
+    //frequencySlider.addListener(p); we need to add
+    
+
 
     addAndMakeVisible(frequencyLabel);
     frequencyLabel.setText("Frequency", juce::dontSendNotification);

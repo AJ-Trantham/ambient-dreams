@@ -15,8 +15,10 @@ using namespace juce;
 /**
 */
 class VoltronAudioProcessor  : public juce::AudioProcessor
+                             
 {
 public:
+    AudioParameterFloat* frequencySliderValue;
     //==============================================================================
     VoltronAudioProcessor();
     ~VoltronAudioProcessor() override;
@@ -76,4 +78,5 @@ private:
     Reverb reverb;
     Synthesiser synth;
     SynthesiserSound::Ptr sound;
+    
 };

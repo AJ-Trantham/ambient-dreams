@@ -32,6 +32,8 @@ public:
     void sliderValueChanged(juce::Slider* slider) override //this can't access toneGenRoot which is an issue. not sure how to actually pass the slider value back and forth
     {
         frequencySlider.setValue(frequencySlider.getValue(), juce::dontSendNotification);
+        // set the root frequency in the audioProcessor
+        audioProcessor.frequencySliderValue->operator=(frequencySlider.getValue());
     }
 
 

@@ -17,10 +17,16 @@ VoltronAudioProcessor::VoltronAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
      : AudioProcessor(BusesProperties().withOutput("Output", juce::AudioChannelSet::stereo(), true)) // sets output but doesnot set input
 #endif
-{
-    for (auto i = 0; i < maxNumVoices; ++i) {
+    {
+    /* for (auto i = 0; i < maxNumVoices; ++i) {
         synth.addVoice(new SamplerVoice());
-    }
+    } */
+
+    // set to the range of a extended 108 key piano
+    float A0 = 27.50000f;
+    float middleC = 261.6256f;
+    float B8 = 7902.133f;
+    addParameter(frequencySliderValue= new juce::AudioParameterFloat("frequency", "Frequency", A0, B8, A0));
 }
 
 VoltronAudioProcessor::~VoltronAudioProcessor()
@@ -80,9 +86,7 @@ void VoltronAudioProcessor::changeProgramName (int index, const juce::String& ne
 //==============================================================================
 void VoltronAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // set up the tone generator
-    toneGenRoot.setAmplitude(1.0);
-    toneGenRoot.setFrequency(440); //somehow this needs to be programmatically set from the slider
+   
     toneGenRoot.prepareToPlay(sampleRate, samplesPerBlock);
     
     //synth.setCurrentPlaybackSampleRate(sampleRate);
@@ -106,7 +110,12 @@ bool VoltronAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) 
 
 void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    
+    auto rootFrequencyValue = frequencySliderValue->get();
+    printf("Frequency Slider Value: %f\n", rootFrequencyValue);
+    //OutputDebugStringA(rootFrequencyValue);
+    // set up the tone generator
+    toneGenRoot.setAmplitude(1.0);
+    toneGenRoot.setFrequency(rootFrequencyValue);
 
     //loadNewSample(&buffer, "ogg");
 
