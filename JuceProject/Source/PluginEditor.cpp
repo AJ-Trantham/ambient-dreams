@@ -21,11 +21,30 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (VoltronAudioProc
     frequencySlider.addListener(this); 
     //frequencySlider.addListener(p); we need to add
     
-
-
     addAndMakeVisible(frequencyLabel);
     frequencyLabel.setText("Frequency", juce::dontSendNotification);
     frequencyLabel.attachToComponent(&frequencySlider, true); // [4]
+    
+    keyMenu.addItem ("A", 'A');
+    keyMenu.addItem ("A#", 'a');
+    keyMenu.addItem ("B", 'B');
+    keyMenu.addItem ("C", 'C');
+    keyMenu.addItem ("C#", 'c');
+    keyMenu.addItem ("D", 'D');
+    keyMenu.addItem ("D#", 'd');
+    keyMenu.addItem ("E", 'E');
+    keyMenu.addItem ("F", 'F');
+    keyMenu.addItem ("F#", 'f');
+    keyMenu.addItem ("G", 'G');
+    keyMenu.addItem ("G#", 'g');
+    
+    keyMenu.onChange = [this] { styleMenuChanged(); };
+    keyMenu.setSelectedId (1);
+    keyMenu.setJustificationType(Justification::centred);
+    
+    addAndMakeVisible(&keyMenu);
+
+
 
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -59,9 +78,13 @@ void NewProjectAudioProcessorEditor::paint (juce::Graphics& g)
 
 void NewProjectAudioProcessorEditor::resized()
 {
+    juce::Rectangle<int> area = getLocalBounds().reduced(40);
+    keyMenu.setBounds(area.removeFromTop(20));
+    
     auto sliderLeft = 120;
     frequencySlider.setBounds(sliderLeft, 20, getWidth() - sliderLeft - 10, 20);
     durationSlider.setBounds(sliderLeft, 50, getWidth() - sliderLeft - 10, 20);
+
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
 }

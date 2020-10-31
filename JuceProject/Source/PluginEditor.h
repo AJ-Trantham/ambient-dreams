@@ -28,21 +28,68 @@ public:
     juce::Label  frequencyLabel;
     juce::Slider durationSlider;
     juce::Label  durationLabel;
-
+    
     void sliderValueChanged(juce::Slider* slider) override //this can't access toneGenRoot which is an issue. not sure how to actually pass the slider value back and forth
     {
         frequencySlider.setValue(frequencySlider.getValue(), juce::dontSendNotification);
         // set the root frequency in the audioProcessor
-        audioProcessor.frequencySliderValue->operator=(frequencySlider.getValue());
+        //audioProcessor.frequencySliderValue->operator=(frequencySlider.getValue());
     }
-
+    
+    void styleMenuChanged()
+    {
+        float freq;
+        switch (keyMenu.getSelectedId())
+        {
+            case 'A':
+                freq = 440.0000;
+                break;
+            case 'a':
+                freq = 466.1638;
+                break;
+            case 'B':
+                freq = 493.8833;
+                break;
+            case 'C':
+                freq = 261.6256;
+                break;
+            case 'c':
+                freq = 277.1826;
+                break;
+            case 'D':
+                freq = 293.6648;
+                break;
+            case 'd':
+                freq = 311.1270;
+                break;
+            case 'E':
+                freq = 329.6276;
+                break;
+            case 'F':
+                freq = 349.2282;
+                break;
+            case 'f':
+                freq = 369.9944;
+                break;
+            case 'G':
+                freq = 391.9954;
+                break;
+            case 'g':
+                freq = 415.3047;
+                break;
+            default:
+                freq = 261.6256; // C4
+                break;
+        }
+        audioProcessor.frequencySliderValue->operator=(freq);
+    }
 
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     VoltronAudioProcessor &audioProcessor;
 
-
+    ComboBox keyMenu;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NewProjectAudioProcessorEditor)
 };
