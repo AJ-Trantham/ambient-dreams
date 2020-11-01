@@ -4,6 +4,7 @@
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1">
   <MAINGROUP id="dyFPvY" name="NewProject">
     <GROUP id="{CEF6A4EF-F60D-CC94-BB97-0AE3462E90A6}" name="Source">
+      <FILE id="vTZ6ST" name="nightsky.jpg" compile="0" resource="1" file="Source/nightsky.jpg"/>
       <FILE id="QCDLqE" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="ihm0pB" name="PluginProcessor.h" compile="0" resource="0"
@@ -12,7 +13,6 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="vpwsPV" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
-    <FILE id="VrGFXt" name="night-sky.jpg" compile="0" resource="1" file="../../../../../../Pictures/night-sky.jpg"/>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>
