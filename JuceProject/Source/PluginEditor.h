@@ -26,12 +26,25 @@ public:
 
     juce::Slider frequencySlider;
     juce::Label  frequencyLabel;
+    juce::Slider roomSizeSlider;
+    juce::Label  roomSizeLabel;
+    juce::Slider wetLevelSlider;
+    juce::Label  wetLevelLabel;
+    juce::Slider dampingSlider;
+    juce::Label  dampingLabel;
+    juce::Slider dryLevelSlider;
+    juce::Label  dryLevelLabel;
     juce::Slider durationSlider;
     juce::Label  durationLabel;
     
     void sliderValueChanged(juce::Slider* slider) override //this can't access toneGenRoot which is an issue. not sure how to actually pass the slider value back and forth
     {
         frequencySlider.setValue(frequencySlider.getValue(), juce::dontSendNotification);
+        //audioProcessor.freq =frequencySlider.getValue();
+         audioProcessor.rSize = roomSizeSlider.getValue();
+        audioProcessor.wet = wetLevelSlider.getValue();
+        audioProcessor.dry = dryLevelSlider.getValue();
+        audioProcessor.damping = dampingSlider.getValue();
         // set the root frequency in the audioProcessor
         //audioProcessor.frequencySliderValue->operator=(frequencySlider.getValue());
     }
@@ -83,8 +96,10 @@ public:
         }
         audioProcessor.frequencySliderValue->operator=(freq);
     }
+    
 
 private:
+    //void roomSizeSliderValueChanged(juce::Slider* slider) override; // [3]
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     VoltronAudioProcessor &audioProcessor;

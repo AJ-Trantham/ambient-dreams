@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 using namespace juce;
 
+
 //==============================================================================
 /**
 */
@@ -44,6 +45,10 @@ public:
     bool producesMidi() const override;
     bool isMidiEffect() const override;
     double getTailLengthSeconds() const override;
+    public: float rSize=0.5;
+    public: float wet=0.5;
+    public: float dry=0.5;
+    public: float damping=0.5;
 
     //==============================================================================
     int getNumPrograms() override;
