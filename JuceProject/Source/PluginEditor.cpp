@@ -15,7 +15,7 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (VoltronAudioProc
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
     addAndMakeVisible(frequencySlider);
-    frequencySlider.setRange(50, 5000.0);         
+    frequencySlider.setRange(27.50000f, 7902.133f);
     frequencySlider.setTextValueSuffix(" Hz");     
     frequencySlider.setValue(500.0);
     frequencySlider.addListener(this); 

@@ -19,7 +19,6 @@ class VoltronAudioProcessor  : public juce::AudioProcessor
                              
 {
 public:
-    AudioParameterFloat* frequencySliderValue;
     //==============================================================================
     VoltronAudioProcessor();
     ~VoltronAudioProcessor() override;
@@ -49,6 +48,8 @@ public:
     public: float wet=0.5;
     public: float dry=0.5;
     public: float damping=0.5;
+    public: float rootFrequencyValue;
+    public: ToneGeneratorAudioSource toneGenRoot;
 
     //==============================================================================
     int getNumPrograms() override;
@@ -79,7 +80,6 @@ private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(VoltronAudioProcessor);
     AudioFormatManager formatManager;
-    ToneGeneratorAudioSource toneGenRoot;
     Reverb reverb;
     Synthesiser synth;
     SynthesiserSound::Ptr sound;

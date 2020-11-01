@@ -27,7 +27,7 @@ VoltronAudioProcessor::VoltronAudioProcessor()
     float A0 = 27.50000f;
     float middleC = 261.6256f;
     float B8 = 7902.133f;
-    addParameter(frequencySliderValue= new juce::AudioParameterFloat("frequency", "Frequency", A0, B8, A0));
+    addParameter(frequencySliderValue= new juce::AudioParameterFloat("frequency", "Frequency", A0, B8, A0)); //this is actually set in PluginEditor.cpp at the setRange() call on frequencySlider
 }
 
 VoltronAudioProcessor::~VoltronAudioProcessor()
@@ -111,7 +111,6 @@ bool VoltronAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) 
 
 void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    auto rootFrequencyValue = frequencySliderValue->get();
     //printf("Frequency Slider Value: %f\n", rootFrequencyValue);
     //OutputDebugStringA(rootFrequencyValue);
     // set up the tone generator
