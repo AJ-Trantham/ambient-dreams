@@ -21,6 +21,42 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (VoltronAudioProc
     frequencySlider.addListener(this); 
     //frequencySlider.addListener(p); we need to add
     
+    addAndMakeVisible(roomSizeSlider);
+    roomSizeSlider.setRange(0,1.0);
+    roomSizeSlider.setTextValueSuffix(" %");
+    roomSizeSlider.setValue(.5);
+    roomSizeSlider.addListener(this);
+    addAndMakeVisible(roomSizeLabel);
+    roomSizeLabel.setText("Room Size", juce::dontSendNotification);
+    roomSizeLabel.attachToComponent(&roomSizeSlider, true); // [4
+    
+    addAndMakeVisible(wetLevelSlider);
+    wetLevelSlider.setRange(0,1.0);
+    wetLevelSlider.setTextValueSuffix(" %");
+    wetLevelSlider.setValue(.5);
+    wetLevelSlider.addListener(this);
+    addAndMakeVisible(wetLevelLabel);
+    wetLevelLabel.setText("Wet Level", juce::dontSendNotification);
+    wetLevelLabel.attachToComponent(&wetLevelSlider, true);
+    
+    addAndMakeVisible(dryLevelSlider);
+    dryLevelSlider.setRange(0,1.0);
+    dryLevelSlider.setTextValueSuffix(" %");
+    dryLevelSlider.setValue(.5);
+    dryLevelSlider.addListener(this);
+    addAndMakeVisible(dryLevelLabel);
+    dryLevelLabel.setText("Dry Level", juce::dontSendNotification);
+    dryLevelLabel.attachToComponent(&dryLevelSlider, true);
+    
+    addAndMakeVisible(dampingSlider);
+    dampingSlider.setRange(0,1.0);
+    dampingSlider.setTextValueSuffix(" %");
+    dampingSlider.setValue(.5);
+    dampingSlider.addListener(this);
+    addAndMakeVisible(dampingLabel);
+    dampingLabel.setText("Damping ", juce::dontSendNotification);
+    dampingLabel.attachToComponent(&dampingSlider, true);
+    
     addAndMakeVisible(frequencyLabel);
     frequencyLabel.setText("Frequency", juce::dontSendNotification);
     frequencyLabel.attachToComponent(&frequencySlider, true); // [4]
@@ -61,7 +97,7 @@ void NewProjectAudioProcessorEditor::paint (juce::Graphics& g)
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
     
-    juce::Image bgImage;
+//juce::Image bgImage;
     bgImage = juce::ImageCache::getFromMemory(BinaryData::nightsky_jpg, BinaryData::nightsky_jpgSize);
     g.drawImage(bgImage, 0, 0, getWidth(), getHeight(), 0, 0, bgImage.getWidth(), bgImage.getHeight());
     g.setColour (juce::Colours::white);
@@ -84,7 +120,10 @@ void NewProjectAudioProcessorEditor::resized()
     auto sliderLeft = 120;
     frequencySlider.setBounds(sliderLeft, 20, getWidth() - sliderLeft - 10, 20);
     durationSlider.setBounds(sliderLeft, 50, getWidth() - sliderLeft - 10, 20);
-
+    roomSizeSlider.setBounds(sliderLeft, 80, getWidth() - sliderLeft - 10, 20);
+    wetLevelSlider.setBounds(sliderLeft, 120, getWidth() - sliderLeft - 300, 20);
+    dryLevelSlider.setBounds(sliderLeft, 150, getWidth() - sliderLeft - 300, 20);
+    dampingSlider.setBounds(sliderLeft, 180, getWidth() - sliderLeft - 300, 20);
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
 }

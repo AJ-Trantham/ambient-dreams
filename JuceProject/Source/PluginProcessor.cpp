@@ -21,6 +21,7 @@ VoltronAudioProcessor::VoltronAudioProcessor()
     /* for (auto i = 0; i < maxNumVoices; ++i) {
         synth.addVoice(new SamplerVoice());
     } */
+       
 
     // set to the range of a extended 108 key piano
     float A0 = 27.50000f;
@@ -111,17 +112,28 @@ bool VoltronAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) 
 void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     auto rootFrequencyValue = frequencySliderValue->get();
-    printf("Frequency Slider Value: %f\n", rootFrequencyValue);
+    //printf("Frequency Slider Value: %f\n", rootFrequencyValue);
     //OutputDebugStringA(rootFrequencyValue);
     // set up the tone generator
     toneGenRoot.setAmplitude(1.0);
     toneGenRoot.setFrequency(rootFrequencyValue);
 
     //loadNewSample(&buffer, "ogg");
-
+    //juce::AudioProcessorEditor* check = this->createEditor();
+   // int t= *check.getRoom();
     Reverb::Parameters reverbParameters;
-    reverbParameters.roomSize = roomSize;
+    float r= rSize;
 
+    reverbParameters.roomSize = r;
+    reverbParameters.wetLevel=wet;
+    reverbParameters.dryLevel=dry;
+    reverbParameters.damping=damping;
+    printf("Room Size value %f ", reverbParameters.roomSize);
+    printf("wet level %f\n ", reverbParameters.wetLevel);
+    printf("damping %f \n", reverbParameters.damping);
+    printf("dry level %f \n", reverbParameters.dryLevel);
+    
+    
     /*SynthesiserSound::Ptr newSound = new SamplerSound();
     sound = newSound;
     synth.addSound(sound)
