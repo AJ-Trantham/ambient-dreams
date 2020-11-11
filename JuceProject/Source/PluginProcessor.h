@@ -9,6 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "VoltronToneGenerator.h"
 using namespace juce;
 
 
@@ -19,7 +20,6 @@ class VoltronAudioProcessor  : public juce::AudioProcessor
                              
 {
 public:
-    AudioParameterFloat* frequencySliderValue;
     //==============================================================================
     VoltronAudioProcessor();
     ~VoltronAudioProcessor() override;
@@ -45,10 +45,13 @@ public:
     bool producesMidi() const override;
     bool isMidiEffect() const override;
     double getTailLengthSeconds() const override;
+    void updateAngleDelta();
     public: float rSize=0.5;
     public: float wet=0.5;
     public: float dry=0.5;
     public: float damping=0.5;
+    public: float rootFrequencyValue;
+    public: VoltronToneGenerator toneGenRoot;
 
     //==============================================================================
     int getNumPrograms() override;
@@ -79,9 +82,9 @@ private:
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(VoltronAudioProcessor);
     AudioFormatManager formatManager;
-    ToneGeneratorAudioSource toneGenRoot;
     Reverb reverb;
     Synthesiser synth;
     SynthesiserSound::Ptr sound;
+    float checkValue = 1;
     
 };

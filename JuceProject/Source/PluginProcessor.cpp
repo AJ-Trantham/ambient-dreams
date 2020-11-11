@@ -8,6 +8,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
+#include "VoltronToneGenerator.h"
 
 
 
@@ -18,16 +19,7 @@ VoltronAudioProcessor::VoltronAudioProcessor()
      : AudioProcessor(BusesProperties().withOutput("Output", juce::AudioChannelSet::stereo(), true)) // sets output but doesnot set input
 #endif
     {
-    /* for (auto i = 0; i < maxNumVoices; ++i) {
-        synth.addVoice(new SamplerVoice());
-    } */
-       
-
-    // set to the range of a extended 108 key piano
-    float A0 = 27.50000f;
-    float middleC = 261.6256f;
-    float B8 = 7902.133f;
-    addParameter(frequencySliderValue= new juce::AudioParameterFloat("frequency", "Frequency", A0, B8, A0));
+        
 }
 
 VoltronAudioProcessor::~VoltronAudioProcessor()
@@ -42,17 +34,17 @@ const juce::String VoltronAudioProcessor::getName() const
 
 bool VoltronAudioProcessor::acceptsMidi() const
 {
-    return true;
+    return false;
 }
 
 bool VoltronAudioProcessor::producesMidi() const
 {
-    return true;
+    return false;
 }
 
 bool VoltronAudioProcessor::isMidiEffect() const
 {
-    return true;
+    return false;
 }
 
 double VoltronAudioProcessor::getTailLengthSeconds() const
@@ -87,10 +79,7 @@ void VoltronAudioProcessor::changeProgramName (int index, const juce::String& ne
 //==============================================================================
 void VoltronAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-   
-    toneGenRoot.prepareToPlay(sampleRate, samplesPerBlock);
-    
-    //synth.setCurrentPlaybackSampleRate(sampleRate);
+    toneGenRoot.setSampleRate(sampleRate);
     reverb.setSampleRate(sampleRate);
 }
 
@@ -98,7 +87,7 @@ void VoltronAudioProcessor::releaseResources()
 {
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
-    toneGenRoot.releaseResources();
+    // TODO: we might need to call the destructors of the tone generators here
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -111,18 +100,12 @@ bool VoltronAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) 
 
 void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-    auto rootFrequencyValue = frequencySliderValue->get();
-    //printf("Frequency Slider Value: %f\n", rootFrequencyValue);
-    //OutputDebugStringA(rootFrequencyValue);
-    // set up the tone generator
-    toneGenRoot.setAmplitude(1.0);
-    toneGenRoot.setFrequency(rootFrequencyValue);
-
-    //loadNewSample(&buffer, "ogg");
-    //juce::AudioProcessorEditor* check = this->createEditor();
-   // int t= *check.getRoom();
     Reverb::Parameters reverbParameters;
     float r= rSize;
+
+    toneGenRoot.setFrequency(rootFrequencyValue);
+    toneGenRoot.updateAngleDelta();
+    toneGenRoot.fillBufferWithTone(buffer);
 
     reverbParameters.roomSize = r;
     reverbParameters.wetLevel=wet;
@@ -132,25 +115,13 @@ void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
     printf("wet level %f\n ", reverbParameters.wetLevel);
     printf("damping %f \n", reverbParameters.damping);
     printf("dry level %f \n", reverbParameters.dryLevel);
-    
-    
-    /*SynthesiserSound::Ptr newSound = new SamplerSound();
-    sound = newSound;
-    synth.addSound(sound)
-
-    MidiMessage message = MidiMessage::noteOn(1, 5, (uint8)100);
-    midiMessages.addEvent(message, 0);*/
 
     reverb.setParameters(reverbParameters);
-    //synth.renderNextBlock(buffer, midiMessages, 0, buffer.getNumSamples());
-    // using the tone generator
-    toneGenRoot.getNextAudioBlock(juce::AudioSourceChannelInfo(buffer));
 
     if (getMainBusNumOutputChannels() == 1)
         reverb.processMono(buffer.getWritePointer(0), buffer.getNumSamples());
     else if (getMainBusNumOutputChannels() == 2)
         reverb.processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
-
 }
 
 //==============================================================================

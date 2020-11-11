@@ -39,9 +39,9 @@ public:
     
     void sliderValueChanged(juce::Slider* slider) override //this can't access toneGenRoot which is an issue. not sure how to actually pass the slider value back and forth
     {
-        frequencySlider.setValue(frequencySlider.getValue(), juce::dontSendNotification);
+        audioProcessor.rootFrequencyValue = frequencySlider.getValue();
         //audioProcessor.freq =frequencySlider.getValue();
-         audioProcessor.rSize = roomSizeSlider.getValue();
+        audioProcessor.rSize = roomSizeSlider.getValue();
         audioProcessor.wet = wetLevelSlider.getValue();
         audioProcessor.dry = dryLevelSlider.getValue();
         audioProcessor.damping = dampingSlider.getValue();
@@ -94,7 +94,8 @@ public:
                 freq = 261.6256; // C4
                 break;
         }
-        audioProcessor.frequencySliderValue->operator=(freq);
+        frequencySlider.setValue(freq);
+        audioProcessor.rootFrequencyValue = freq;
     }
     
 
