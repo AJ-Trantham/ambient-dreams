@@ -13,14 +13,7 @@
 //==============================================================================
 NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (VoltronAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
-{
-    addAndMakeVisible(frequencySlider);
-    frequencySlider.setRange(27.50000f, 7902.133f);
-    frequencySlider.setTextValueSuffix(" Hz");     
-    frequencySlider.setValue(500.0);
-    frequencySlider.addListener(this); 
-    //frequencySlider.addListener(p); we need to add
-    
+{ 
     addAndMakeVisible(roomSizeSlider);
     roomSizeSlider.setRange(0,1.0);
     roomSizeSlider.setTextValueSuffix(" %");
@@ -56,10 +49,6 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (VoltronAudioProc
     addAndMakeVisible(dampingLabel);
     dampingLabel.setText("Damping ", juce::dontSendNotification);
     dampingLabel.attachToComponent(&dampingSlider, true);
-    
-    addAndMakeVisible(frequencyLabel);
-    frequencyLabel.setText("Frequency", juce::dontSendNotification);
-    frequencyLabel.attachToComponent(&frequencySlider, true); // [4]
     
     keyMenu.addItem ("A", 'A');
     keyMenu.addItem ("A#", 'a');
@@ -118,7 +107,6 @@ void NewProjectAudioProcessorEditor::resized()
     keyMenu.setBounds(area.removeFromTop(20));
     
     auto sliderLeft = 120;
-    frequencySlider.setBounds(sliderLeft, 20, getWidth() - sliderLeft - 10, 20);
     durationSlider.setBounds(sliderLeft, 50, getWidth() - sliderLeft - 10, 20);
     roomSizeSlider.setBounds(sliderLeft, 80, getWidth() - sliderLeft - 10, 20);
     wetLevelSlider.setBounds(sliderLeft, 120, getWidth() - sliderLeft - 300, 20);
