@@ -15,40 +15,60 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (VoltronAudioProc
     : AudioProcessorEditor (&p), audioProcessor (p)
 { 
     addAndMakeVisible(roomSizeSlider);
+    roomSizeSlider.setSliderStyle(Slider::SliderStyle::Rotary);
     roomSizeSlider.setRange(0,1.0);
     roomSizeSlider.setTextValueSuffix(" %");
     roomSizeSlider.setValue(.5);
     roomSizeSlider.addListener(this);
-    addAndMakeVisible(roomSizeLabel);
+    roomSizeSlider.setTextBoxStyle(Slider::NoTextBox,true, 60, 15);
+    roomSizeSlider.setPopupDisplayEnabled( true,false,NULL,2000);
+    roomSizeSlider.setNumDecimalPlacesToDisplay(3);
+    roomSizeLabel.setJustificationType(Justification::centredBottom);
     roomSizeLabel.setText("Room Size", juce::dontSendNotification);
-    roomSizeLabel.attachToComponent(&roomSizeSlider, true); // [4
+    roomSizeLabel.attachToComponent(&roomSizeSlider, false);
     
-    addAndMakeVisible(wetLevelSlider);
-    wetLevelSlider.setRange(0,1.0);
-    wetLevelSlider.setTextValueSuffix(" %");
-    wetLevelSlider.setValue(.5);
-    wetLevelSlider.addListener(this);
-    addAndMakeVisible(wetLevelLabel);
-    wetLevelLabel.setText("Wet Level", juce::dontSendNotification);
-    wetLevelLabel.attachToComponent(&wetLevelSlider, true);
+     addAndMakeVisible(wetLevelSlider);
+     wetLevelSlider.setRange(0,1.0);
+     wetLevelSlider.setTextValueSuffix(" %");
+     wetLevelSlider.setSliderStyle(Slider::SliderStyle::Rotary);
+     wetLevelSlider.setValue(.5);
+     wetLevelSlider.setTextBoxStyle(Slider::NoTextBox,true, 60, 15);
+     wetLevelSlider.setPopupDisplayEnabled( true,false,NULL,2000);
+     wetLevelSlider.setNumDecimalPlacesToDisplay(3);
+     wetLevelSlider.addListener(this);
     
-    addAndMakeVisible(dryLevelSlider);
-    dryLevelSlider.setRange(0,1.0);
-    dryLevelSlider.setTextValueSuffix(" %");
-    dryLevelSlider.setValue(.5);
-    dryLevelSlider.addListener(this);
-    addAndMakeVisible(dryLevelLabel);
-    dryLevelLabel.setText("Dry Level", juce::dontSendNotification);
-    dryLevelLabel.attachToComponent(&dryLevelSlider, true);
+    
+     //wetLevelSlider.setColour(c,juce::Colours::white );
+     wetLevelLabel.setJustificationType(Justification::centredBottom);
+     wetLevelLabel.setText("Wet Level", juce::dontSendNotification);
+     wetLevelLabel.attachToComponent(&wetLevelSlider, false);
+    
+     addAndMakeVisible(dryLevelSlider);
+     dryLevelSlider.setSliderStyle(Slider::SliderStyle::Rotary);
+     dryLevelSlider.setRange(0,1.0);
+     dryLevelSlider.setTextValueSuffix(" %");
+     dryLevelSlider.setValue(.5);
+     dryLevelSlider.setTextBoxStyle(Slider::NoTextBox,true, 60, 15);
+     dryLevelSlider.setPopupDisplayEnabled( true,false,NULL,2000);
+     dryLevelSlider.setNumDecimalPlacesToDisplay(3);
+     dryLevelSlider.addListener(this);
+     dryLevelLabel.setJustificationType(Justification::centredBottom);
+     dryLevelLabel.setText("Dry Level", juce::dontSendNotification);
+     dryLevelLabel.attachToComponent(&dryLevelSlider, false);
     
     addAndMakeVisible(dampingSlider);
+    dampingSlider.setSliderStyle(Slider::SliderStyle::Rotary);
     dampingSlider.setRange(0,1.0);
     dampingSlider.setTextValueSuffix(" %");
     dampingSlider.setValue(.5);
+    dampingSlider.setTextBoxStyle(Slider::NoTextBox,true, 60, 15);
+    dampingSlider.setPopupDisplayEnabled( true,false,NULL,2000);
+    dampingSlider.setNumDecimalPlacesToDisplay(3);
     dampingSlider.addListener(this);
     addAndMakeVisible(dampingLabel);
-    dampingLabel.setText("Damping ", juce::dontSendNotification);
-    dampingLabel.attachToComponent(&dampingSlider, true);
+    dampingLabel.setJustificationType(Justification::centredBottom);
+    dampingLabel.setText("Damping", juce::dontSendNotification);
+    dampingLabel.attachToComponent(&dampingSlider, false);
     
     keyMenu.addItem ("A", 'A');
     keyMenu.addItem ("A#", 'a');
@@ -83,6 +103,7 @@ NewProjectAudioProcessorEditor::~NewProjectAudioProcessorEditor()
 //==============================================================================
 void NewProjectAudioProcessorEditor::paint (juce::Graphics& g)
 {
+   
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
     
@@ -93,25 +114,32 @@ void NewProjectAudioProcessorEditor::paint (juce::Graphics& g)
     g.setFont (15.0f);
     g.drawText("Noisier", 425, 500, 75, 20, juce::Justification::centredRight);
     //g.drawFittedText ("Noisier", getLocalBounds(), juce::Justification::centred, 1);
-    g.setColour (juce::Colours::white);
+    g.setColour (juce::Colours::black);
+    g.setOpacity(.5);
     // | (60) 150 (60) 150 (60) 150 (60) 150 (60) |
     g.fillRect(60, 150, 150, 300);
     g.fillRect(270, 150, 150, 300);
     g.fillRect(490, 150, 150, 300);
     g.fillRect(700, 150, 150, 300);
+    g.setColour (juce::Colours::white);
+    g.drawRect(60, 150, 150, 300);
+    g.drawRect(270, 150, 150, 300);
+    g.drawRect(490, 150, 150, 300);
+    g.drawRect(700, 150, 150, 300);
+    g.setFont (25.0f);
+    g.drawText("Reverb", 660, 55, 150,150, juce::Justification::centredRight);
 }
 
 void NewProjectAudioProcessorEditor::resized()
 {
     juce::Rectangle<int> area = getLocalBounds().reduced(40);
     keyMenu.setBounds(area.removeFromTop(20));
-    
     auto sliderLeft = 120;
     durationSlider.setBounds(sliderLeft, 50, getWidth() - sliderLeft - 10, 20);
-    roomSizeSlider.setBounds(sliderLeft, 80, getWidth() - sliderLeft - 10, 20);
-    wetLevelSlider.setBounds(sliderLeft, 120, getWidth() - sliderLeft - 300, 20);
-    dryLevelSlider.setBounds(sliderLeft, 150, getWidth() - sliderLeft - 300, 20);
-    dampingSlider.setBounds(sliderLeft, 180, getWidth() - sliderLeft - 300, 20);
+    dryLevelSlider.setBoundsRelative(0.81, 0.285, 0.1, 0.1);
+    wetLevelSlider.setBoundsRelative(0.81, 0.405, 0.1, 0.1);
+    dampingSlider.setBoundsRelative(0.81, 0.525, 0.1, 0.1);
+    roomSizeSlider.setBoundsRelative(0.81, 0.645, 0.1, 0.1);
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
 }
