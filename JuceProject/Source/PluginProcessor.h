@@ -52,6 +52,8 @@ public:
     public: float damping=0.5;
     public: float rootFrequencyValue;
     public: VoltronToneGenerator toneGenRoot;
+    public: bool onOffState;
+    public: bool startup = false;
 
     //==============================================================================
     int getNumPrograms() override;

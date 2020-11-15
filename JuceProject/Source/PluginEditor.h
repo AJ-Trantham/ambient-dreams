@@ -35,7 +35,7 @@ public:
     juce::Slider durationSlider;
     juce::Label  durationLabel;
     
-    void sliderValueChanged(juce::Slider* slider) override //this can't access toneGenRoot which is an issue. not sure how to actually pass the slider value back and forth
+    void sliderValueChanged(juce::Slider* slider) override
     {
         audioProcessor.rSize = roomSizeSlider.getValue();
         audioProcessor.wet = wetLevelSlider.getValue();
@@ -85,10 +85,14 @@ public:
                 freq = 415.3047;
                 break;
             default:
-                freq = 261.6256; // C4
                 break;
         }
         audioProcessor.rootFrequencyValue = freq;
+    }
+
+    void onOffSwitchToggled()
+    {
+        audioProcessor.onOffState = onOff.getToggleState();
     }
     
 
@@ -99,6 +103,7 @@ private:
     VoltronAudioProcessor &audioProcessor;
 
     ComboBox keyMenu;
+    ToggleButton onOff;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NewProjectAudioProcessorEditor)
 };

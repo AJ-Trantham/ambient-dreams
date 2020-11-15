@@ -14,6 +14,14 @@
 NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (VoltronAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 { 
+
+    if (!audioProcessor.startup)
+    {
+        audioProcessor.rootFrequencyValue = 0;
+        audioProcessor.onOffState = false;
+        audioProcessor.startup = true;
+    }
+
     addAndMakeVisible(roomSizeSlider);
     roomSizeSlider.setSliderStyle(Slider::SliderStyle::Rotary);
     roomSizeSlider.setRange(0,1.0);
@@ -84,12 +92,14 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (VoltronAudioProc
     keyMenu.addItem ("G#", 'g');
     
     keyMenu.onChange = [this] { styleMenuChanged(); };
-    keyMenu.setSelectedId (1);
+    keyMenu.setSelectedId(1);
     keyMenu.setJustificationType(Justification::centred);
-    
+
     addAndMakeVisible(&keyMenu);
 
-
+    addAndMakeVisible(&onOff);
+    onOff.setButtonText("On/Off");
+    onOff.onClick = [this] { onOffSwitchToggled(); };
 
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -134,6 +144,7 @@ void NewProjectAudioProcessorEditor::resized()
 {
     juce::Rectangle<int> area = getLocalBounds().reduced(40);
     keyMenu.setBounds(area.removeFromTop(20));
+    onOff.setBoundsRelative(0.05, 0.10, 0.1, 0.1);
     auto sliderLeft = 120;
     durationSlider.setBounds(sliderLeft, 50, getWidth() - sliderLeft - 10, 20);
     dryLevelSlider.setBoundsRelative(0.81, 0.285, 0.1, 0.1);

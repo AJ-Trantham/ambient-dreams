@@ -101,27 +101,30 @@ bool VoltronAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) 
 void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     Reverb::Parameters reverbParameters;
-    float r= rSize;
+    if (onOffState)
+    {
+        float r = rSize;
 
-    toneGenRoot.setFrequency(rootFrequencyValue);
-    toneGenRoot.updateAngleDelta();
-    toneGenRoot.fillBufferWithTone(buffer);
+        toneGenRoot.setFrequency(rootFrequencyValue);
+        toneGenRoot.updateAngleDelta();
+        toneGenRoot.fillBufferWithTone(buffer);
 
-    reverbParameters.roomSize = r;
-    reverbParameters.wetLevel=wet;
-    reverbParameters.dryLevel=dry;
-    reverbParameters.damping=damping;
-    printf("Room Size value %f ", reverbParameters.roomSize);
-    printf("wet level %f\n ", reverbParameters.wetLevel);
-    printf("damping %f \n", reverbParameters.damping);
-    printf("dry level %f \n", reverbParameters.dryLevel);
+        reverbParameters.roomSize = r;
+        reverbParameters.wetLevel = wet;
+        reverbParameters.dryLevel = dry;
+        reverbParameters.damping = damping;
+        printf("Room Size value %f ", reverbParameters.roomSize);
+        printf("wet level %f\n ", reverbParameters.wetLevel);
+        printf("damping %f \n", reverbParameters.damping);
+        printf("dry level %f \n", reverbParameters.dryLevel);
 
-    reverb.setParameters(reverbParameters);
+        reverb.setParameters(reverbParameters);
 
-    if (getMainBusNumOutputChannels() == 1)
-        reverb.processMono(buffer.getWritePointer(0), buffer.getNumSamples());
-    else if (getMainBusNumOutputChannels() == 2)
-        reverb.processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
+        if (getMainBusNumOutputChannels() == 1)
+            reverb.processMono(buffer.getWritePointer(0), buffer.getNumSamples());
+        else if (getMainBusNumOutputChannels() == 2)
+            reverb.processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
+    }
 }
 
 //==============================================================================
