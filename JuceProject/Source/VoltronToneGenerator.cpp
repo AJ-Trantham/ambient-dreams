@@ -1,5 +1,6 @@
 
 #include "VoltronToneGenerator.h"
+#include "Note.h"
 
 /*
 * A Tone generator will generate a sine wave.
@@ -7,41 +8,49 @@
 * before calling fillBufferWithTone()
 */
 VoltronToneGenerator::VoltronToneGenerator() {
-    this->level = 0.125f;
-    this->currentAngle = 0.0;
-    this->frequency = 261.6256; // C4
+    
 }
 
 VoltronToneGenerator::~VoltronToneGenerator() {
 
 }
 
-void VoltronToneGenerator::updateAngleDelta() {
-    auto cyclesPerSample = this->frequency / this->sampleRate;                              
-    this->angleDelta = cyclesPerSample * 2.0 * juce::MathConstants<double>::pi;     
+void VoltronToneGenerator::addNote(Note* notePtr) {
+    notes.push_back(*notePtr);
 }
 
-void VoltronToneGenerator::setFrequency(double frequency) {
-    this->frequency = frequency;
+void VoltronToneGenerator::removeNote(double hz) {
+    for (auto i = 0; i < notes.size(); i++) {
+        if (notes[i].getFrequency()) {
+            notes.erase (notes.begin()+i);
+        }
+    }
 }
 
-void VoltronToneGenerator::setSampleRate(double sampleRate) {
-    this->sampleRate = sampleRate;
+void VoltronToneGenerator::clearTones() {
+    notes.clear();
 }
+
 
 void VoltronToneGenerator::fillBufferWithTone(juce::AudioBuffer<float>& buffer) {
     
     AudioSourceChannelInfo bufferToFill = AudioSourceChannelInfo(buffer);
 
+    // right and left channel
     auto* leftBuffer = bufferToFill.buffer->getWritePointer(0, bufferToFill.startSample);
     auto* rightBuffer = bufferToFill.buffer->getWritePointer(1, bufferToFill.startSample);
 
     for (auto sample = 0; sample < bufferToFill.numSamples; ++sample)
     {
-        auto currentSample = (float)std::sin(currentAngle);
-        currentAngle += this->angleDelta;
-        leftBuffer[sample] = currentSample * this->level;
-        rightBuffer[sample] = currentSample * this->level;
+
+        // sums the sine components of each note in the generator
+        auto currentSample = 0.0;
+        for (auto i = 0; i < notes.size(); i++) {
+            currentSample += notes[i].getSineWave();
+        }
+        
+        leftBuffer[sample] = currentSample;
+        rightBuffer[sample] = currentSample;
     }
 }
 
