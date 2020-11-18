@@ -79,7 +79,7 @@ void VoltronAudioProcessor::changeProgramName (int index, const juce::String& ne
 //==============================================================================
 void VoltronAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    toneGenRoot.setSampleRate(sampleRate);
+    this->sampleRate = sampleRate; // this is essential as we need the sample rate when adding notes in the processBlock()
     reverb.setSampleRate(sampleRate);
 }
 
@@ -88,6 +88,7 @@ void VoltronAudioProcessor::releaseResources()
     // When playback stops, you can use this as an opportunity to free up any
     // spare memory, etc.
     // TODO: we might need to call the destructors of the tone generators here
+    toneGenRoot.clearTones();
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -101,12 +102,25 @@ bool VoltronAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts) 
 void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     Reverb::Parameters reverbParameters;
+    
     if (onOffState)
     {
         float r = rSize;
-
-        toneGenRoot.setFrequency(rootFrequencyValue);
-        toneGenRoot.updateAngleDelta();
+        // we only want to change notes when a new frequency is slected
+        double freq = this->rootFrequencyValue;
+        if (freq != prevRootFreq) {
+            double root = freq;
+            double octave = root * 2.0;
+            double third = root * (5.0 / 4.0);
+            double fifth = root * (6.0 / 4.0);
+            toneGenRoot.clearTones(); // delete the old chord
+            toneGenRoot.addNote(new Note(root, .25, this->sampleRate));
+            toneGenRoot.addNote(new Note(octave, .25, this->sampleRate));
+            toneGenRoot.addNote(new Note(third, .5, this->sampleRate));
+            toneGenRoot.addNote(new Note(fifth, .5, this->sampleRate));
+            prevRootFreq = freq;
+        }
+        
         toneGenRoot.fillBufferWithTone(buffer);
 
         reverbParameters.roomSize = r;

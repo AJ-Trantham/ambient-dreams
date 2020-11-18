@@ -52,7 +52,7 @@ public:
     public: float damping=0.5;
     public: float rootFrequencyValue;
     public: VoltronToneGenerator toneGenRoot;
-    public: bool onOffState;
+    public: bool onOffState = false;
     public: bool startup = false;
 
     //==============================================================================
@@ -88,5 +88,6 @@ private:
     Synthesiser synth;
     SynthesiserSound::Ptr sound;
     float checkValue = 1;
-    
+    double sampleRate;
+    double prevRootFreq = 0.0;
 };

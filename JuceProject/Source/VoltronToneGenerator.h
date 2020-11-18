@@ -15,6 +15,8 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "Note.h"
+#include <vector>
 using namespace juce;
 
 class VoltronToneGenerator {
@@ -23,17 +25,13 @@ public:
     VoltronToneGenerator();
     ~VoltronToneGenerator();
 
-    void setFrequency(double frequency);
-    void setSampleRate(double sampleRate);
-    void updateAngleDelta();
-    void prepareToPlay(double frequency, double sampleRate);
+    void addNote(Note* note);
+    void removeNote(double hz);
     void fillBufferWithTone(juce::AudioBuffer<float>& buffer);
+    void clearTones();
 
 private:
-    double sampleRate;
-    double currentAngle;
-    double angleDelta;
-    double frequency;
-    double level;
+    
     AudioSourceChannelInfo bufferToFill;
+    std::vector<Note> notes;
 };
