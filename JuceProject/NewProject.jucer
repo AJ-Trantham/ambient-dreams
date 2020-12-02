@@ -16,6 +16,8 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="vpwsPV" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
+    <FILE id="Wlcno1" name="Note.cpp" compile="1" resource="0" file="Source/Note.cpp"/>
+    <FILE id="DM5utq" name="Note.h" compile="0" resource="0" file="Source/Note.h"/>
     <FILE id="xoe5N8" name="VoltronToneGenerator.h" compile="0" resource="0"
           file="Source/VoltronToneGenerator.h"/>
   </MAINGROUP>
