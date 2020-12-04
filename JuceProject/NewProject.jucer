@@ -5,6 +5,10 @@
               pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginProducesMidiOut,pluginWantsMidiIn">
   <MAINGROUP id="dyFPvY" name="NewProject">
     <GROUP id="{CEF6A4EF-F60D-CC94-BB97-0AE3462E90A6}" name="Source">
+      <FILE id="DM5utq" name="Note.h" compile="0" resource="0" file="Source/Note.h"/>
+      <FILE id="xoe5N8" name="VoltronToneGenerator.h" compile="0" resource="0"
+            file="Source/VoltronToneGenerator.h"/>
+      <FILE id="Wlcno1" name="Note.cpp" compile="1" resource="0" file="Source/Note.cpp"/>
       <FILE id="DDnuLu" name="VoltronToneGenerator.cpp" compile="1" resource="0"
             file="Source/VoltronToneGenerator.cpp"/>
       <FILE id="vTZ6ST" name="nightsky.jpg" compile="0" resource="1" file="Source/nightsky.jpg"/>
@@ -16,10 +20,6 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="vpwsPV" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
-    <FILE id="Wlcno1" name="Note.cpp" compile="1" resource="0" file="Source/Note.cpp"/>
-    <FILE id="DM5utq" name="Note.h" compile="0" resource="0" file="Source/Note.h"/>
-    <FILE id="xoe5N8" name="VoltronToneGenerator.h" compile="0" resource="0"
-          file="Source/VoltronToneGenerator.h"/>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>
@@ -37,6 +37,9 @@
         <MODULEPATH id="juce_graphics" path="../../Users/ajtre/JuceDownloaded/JUCE/modules"/>
         <MODULEPATH id="juce_gui_basics" path="../../Users/ajtre/JuceDownloaded/JUCE/modules"/>
         <MODULEPATH id="juce_gui_extra" path="../../Users/ajtre/JuceDownloaded/JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../JUCE/modules"/>
+        <MODULEPATH id="stk_wrapper" path="../../Users/ajtre/JuceDownloaded/JUCE/modules"/>
       </MODULEPATHS>
     </CLION>
     <VS2019 targetFolder="Builds/VisualStudio2019">
@@ -57,6 +60,9 @@
         <MODULEPATH id="juce_graphics" path="../../Users/ajtre/JuceDownloaded/JUCE/modules"/>
         <MODULEPATH id="juce_gui_basics" path="../../Users/ajtre/JuceDownloaded/JUCE/modules"/>
         <MODULEPATH id="juce_gui_extra" path="../../Users/ajtre/JuceDownloaded/JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../JUCE/modules"/>
+        <MODULEPATH id="stk_wrapper" path="../../Users/ajtre/JuceDownloaded/JUCE/modules"/>
       </MODULEPATHS>
     </VS2019>
     <XCODE_MAC targetFolder="Builds/MacOSX">
@@ -77,6 +83,9 @@
         <MODULEPATH id="juce_graphics" path="../../Users/ajtre/JuceDownloaded/JUCE/modules"/>
         <MODULEPATH id="juce_gui_basics" path="../../Users/ajtre/JuceDownloaded/JUCE/modules"/>
         <MODULEPATH id="juce_gui_extra" path="../../Users/ajtre/JuceDownloaded/JUCE/modules"/>
+        <MODULEPATH id="juce_dsp" path="../../JUCE/modules"/>
+        <MODULEPATH id="juce_cryptography" path="../../JUCE/modules"/>
+        <MODULEPATH id="stk_wrapper" path="../../Users/ajtre/JuceDownloaded/JUCE/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
   </EXPORTFORMATS>
@@ -89,11 +98,14 @@
     <MODULE id="juce_audio_processors" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_audio_utils" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_core" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_cryptography" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
     <MODULE id="juce_data_structures" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="juce_dsp" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_events" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
+    <MODULE id="stk_wrapper" showAllCode="1" useLocalCopy="1" useGlobalPath="1"/>
   </MODULES>
   <LIVE_SETTINGS>
     <WINDOWS/>

@@ -12,6 +12,7 @@
 
 
 
+
 //==============================================================================
 
 VoltronAudioProcessor::VoltronAudioProcessor() 
@@ -80,6 +81,9 @@ void VoltronAudioProcessor::changeProgramName (int index, const juce::String& ne
 void VoltronAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     this->sampleRate = sampleRate; // this is essential as we need the sample rate when adding notes in the processBlock()
+   // stk::Delay(0,4095);
+   // this->sampleRate = stk::Delay::tick (this->sampleRate );
+    
     reverb.setSampleRate(sampleRate);
 }
 
@@ -120,7 +124,28 @@ void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
             toneGenRoot.addNote(new Note(fifth, .5, this->sampleRate));
             prevRootFreq = freq;
         }
+        stk::StkFrames frames = stk::StkFrames(buffer.getNumSamples(),2);
+        int size=buffer.getNumSamples();
+       for(int i=0;i<size;i++){
+           stk::StkFloat value=buffer.getSample(1, i);
+            stk::StkFrames frame =stk::StkFrames(value,1, 1);
+            frames.operator+(frame);
+           //frame.~StkFrames();
+       }
+        unsigned long v= frames.size();
+        printf("size of array %ul ", v);
+        stk::Chorus chor = stk::Chorus (6000);
+        chor.setModDepth(.8f);
+        chor.setModFrequency(.8);
+        stk::StkFrames buff = stk::StkFrames(buffer.getNumSamples(),2);
+        buff = chor.tick(frames);
+        for(int i=0;i<size;i++){
+            buffer.setSample(1, i,buff.operator[](i));
+        }
+       // frames.~StkFrames();
+       // buff.~StkFrames();
         
+        //chor.clear();
         toneGenRoot.fillBufferWithTone(buffer);
 
         reverbParameters.roomSize = r;
@@ -131,6 +156,8 @@ void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
         printf("wet level %f\n ", reverbParameters.wetLevel);
         printf("damping %f \n", reverbParameters.damping);
         printf("dry level %f \n", reverbParameters.dryLevel);
+        
+
 
         reverb.setParameters(reverbParameters);
 
