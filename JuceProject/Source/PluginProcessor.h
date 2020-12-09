@@ -11,7 +11,7 @@
 #include <JuceHeader.h>
 #include "VoltronToneGenerator.h"
 using namespace juce;
-
+using namespace stk;
 
 //==============================================================================
 /**

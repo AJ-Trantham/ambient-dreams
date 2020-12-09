@@ -124,29 +124,35 @@ void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
             toneGenRoot.addNote(new Note(fifth, .5, this->sampleRate));
             prevRootFreq = freq;
         }
-        stk::StkFrames frames = stk::StkFrames(buffer.getNumSamples(),2);
-        int size=buffer.getNumSamples();
-       for(int i=0;i<size;i++){
-           stk::StkFloat value=buffer.getSample(1, i);
-            stk::StkFrames frame =stk::StkFrames(value,1, 1);
-            frames.operator+(frame);
-           //frame.~StkFrames();
-       }
-        unsigned long v= frames.size();
-        printf("size of array %ul ", v);
-        stk::Chorus chor = stk::Chorus (6000);
-        chor.setModDepth(.8f);
-        chor.setModFrequency(.8);
-        stk::StkFrames buff = stk::StkFrames(buffer.getNumSamples(),2);
-        buff = chor.tick(frames);
-        for(int i=0;i<size;i++){
-            buffer.setSample(1, i,buff.operator[](i));
-        }
-       // frames.~StkFrames();
-       // buff.~StkFrames();
-        
-        //chor.clear();
+
+        // fill buffer with base chordal tone - this needs to happen before we try to put our buffer through ANY effect
         toneGenRoot.fillBufferWithTone(buffer);
+
+        // apply chorus effect
+        StkFrames frames = StkFrames(buffer.getNumSamples(),2);
+        int size=buffer.getNumSamples();
+                
+        unsigned long v = frames.size();
+        printf("size of array %ul ", v);
+        Chorus chor = Chorus(6000);
+        chor.setModDepth(.8);
+        chor.setModFrequency(20.0);
+        chor.setEffectMix(.8); // this seems to affect the overall sound
+        PitShift pitchShift = PitShift(); // I tried this pitch effect as well but it doesn't seem to be working
+        pitchShift.setShift(.7);
+        pitchShift.setEffectMix(.8);
+        for(int i=0;i<size;i++){
+            StkFloat bufferSample = buffer.getSample(0, i);
+            StkFloat audioData = chor.tick(bufferSample);
+            //StkFloat audioData = pitchShift.tick(bufferSample);
+            buffer.setSample(0, i, (float)audioData);
+            buffer.addSample(1, i, (float)audioData);
+        }
+
+       //frames.~StkFrames();
+       //buff.~StkFrames();
+       //chor.clear();
+        
 
         reverbParameters.roomSize = r;
         reverbParameters.wetLevel = wet;
@@ -157,7 +163,6 @@ void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
         printf("damping %f \n", reverbParameters.damping);
         printf("dry level %f \n", reverbParameters.dryLevel);
         
-
 
         reverb.setParameters(reverbParameters);
 

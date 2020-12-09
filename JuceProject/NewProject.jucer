@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="ciWwsa" name="NewProject" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
-              pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginProducesMidiOut,pluginWantsMidiIn">
+              displaySplashScreen="1" jucerFormatVersion="1" pluginCharacteristicsValue="pluginIsMidiEffectPlugin,pluginProducesMidiOut,pluginWantsMidiIn"
+              pluginManufacturer="voltron">
   <MAINGROUP id="dyFPvY" name="NewProject">
     <GROUP id="{CEF6A4EF-F60D-CC94-BB97-0AE3462E90A6}" name="Source">
       <FILE id="DM5utq" name="Note.h" compile="0" resource="0" file="Source/Note.h"/>
@@ -39,7 +39,7 @@
         <MODULEPATH id="juce_gui_extra" path="../../Users/ajtre/JuceDownloaded/JUCE/modules"/>
         <MODULEPATH id="juce_dsp" path="../../JUCE/modules"/>
         <MODULEPATH id="juce_cryptography" path="../../JUCE/modules"/>
-        <MODULEPATH id="stk_wrapper" path="../../Users/ajtre/JuceDownloaded/JUCE/modules"/>
+        <MODULEPATH id="stk_wrapper" path="JuceLibraryCode/modules"/>
       </MODULEPATHS>
     </CLION>
     <VS2019 targetFolder="Builds/VisualStudio2019">
@@ -62,7 +62,7 @@
         <MODULEPATH id="juce_gui_extra" path="../../Users/ajtre/JuceDownloaded/JUCE/modules"/>
         <MODULEPATH id="juce_dsp" path="../../JUCE/modules"/>
         <MODULEPATH id="juce_cryptography" path="../../JUCE/modules"/>
-        <MODULEPATH id="stk_wrapper" path="../../Users/ajtre/JuceDownloaded/JUCE/modules"/>
+        <MODULEPATH id="stk_wrapper" path="JuceLibraryCode/modules"/>
       </MODULEPATHS>
     </VS2019>
     <XCODE_MAC targetFolder="Builds/MacOSX">
@@ -85,7 +85,7 @@
         <MODULEPATH id="juce_gui_extra" path="../../Users/ajtre/JuceDownloaded/JUCE/modules"/>
         <MODULEPATH id="juce_dsp" path="../../JUCE/modules"/>
         <MODULEPATH id="juce_cryptography" path="../../JUCE/modules"/>
-        <MODULEPATH id="stk_wrapper" path="../../Users/ajtre/JuceDownloaded/JUCE/modules"/>
+        <MODULEPATH id="stk_wrapper" path="JuceLibraryCode/modules"/>
       </MODULEPATHS>
     </XCODE_MAC>
   </EXPORTFORMATS>
@@ -105,7 +105,7 @@
     <MODULE id="juce_graphics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_gui_basics" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
     <MODULE id="juce_gui_extra" showAllCode="1" useLocalCopy="0" useGlobalPath="1"/>
-    <MODULE id="stk_wrapper" showAllCode="1" useLocalCopy="1" useGlobalPath="1"/>
+    <MODULE id="stk_wrapper" showAllCode="1" useLocalCopy="0" useGlobalPath="0"/>
   </MODULES>
   <LIVE_SETTINGS>
     <WINDOWS/>
