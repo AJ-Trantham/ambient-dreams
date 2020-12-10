@@ -29,6 +29,9 @@ public:
     void removeNote(double hz);
     void fillBufferWithTone(juce::AudioBuffer<float>& buffer);
     void clearTones();
+    //bool isNoteInList(Note* notePtr);
+    int size();
+
 
 private:
     

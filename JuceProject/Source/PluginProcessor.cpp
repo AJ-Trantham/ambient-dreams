@@ -9,7 +9,8 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "VoltronToneGenerator.h"
-
+#include <time.h>
+#include <stdlib.h>
 
 
 //==============================================================================
@@ -19,7 +20,7 @@ VoltronAudioProcessor::VoltronAudioProcessor()
      : AudioProcessor(BusesProperties().withOutput("Output", juce::AudioChannelSet::stereo(), true)) // sets output but doesnot set input
 #endif
     {
-        
+        srand( static_cast<unsigned int>(time(nullptr)));
 }
 
 VoltronAudioProcessor::~VoltronAudioProcessor()
@@ -120,17 +121,54 @@ void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
         float r = rSize;
         // we only want to change notes when a new frequency is slected
         double freq = this->rootFrequencyValue;
+        
+        double root = freq;
+        double octave = root * 2.0;
+        double third = root * (5.0 / 4.0);
+        double fifth = root * (6.0 / 4.0);
+        
         if (freq != prevRootFreq) {
-            double root = freq;
-            double octave = root * 2.0;
-            double third = root * (5.0 / 4.0);
-            double fifth = root * (6.0 / 4.0);
             toneGenRoot.clearTones(); // delete the old chord
-            toneGenRoot.addNote(new Note(root, .25, this->sampleRate));
+            toneGenRoot.addNote(new Note(root, .5, this->sampleRate));
             toneGenRoot.addNote(new Note(octave, .25, this->sampleRate));
             toneGenRoot.addNote(new Note(third, .5, this->sampleRate));
             toneGenRoot.addNote(new Note(fifth, .5, this->sampleRate));
             prevRootFreq = freq;
+        }
+                
+        if (rand() % 200 == 0) { // about every 2 second
+            
+            int n = rand() % 6 + 1; // random 1 to 6
+            toneGenRoot.clearTones(); // delete the old chord
+            toneGenRoot.addNote(new Note(root, .5, this->sampleRate));
+            toneGenRoot.addNote(new Note(octave, .25, this->sampleRate));
+            toneGenRoot.addNote(new Note(third, .5, this->sampleRate));
+            toneGenRoot.addNote(new Note(fifth, .5, this->sampleRate));
+
+            if (n == 1) { // take out octave
+                toneGenRoot.removeNote(octave);
+            }
+            else if (n == 2) { // take out 3
+                toneGenRoot.removeNote(third);
+
+            }
+            else if (n == 3) { // take out 5
+                toneGenRoot.removeNote(fifth);
+
+            }
+            else if (n == 4) { // take out 3 and 5
+                toneGenRoot.removeNote(third);
+                toneGenRoot.removeNote(fifth);
+            }
+            else if (n == 5) { // take out 3 and 5
+                toneGenRoot.removeNote(octave);
+                toneGenRoot.removeNote(fifth);
+            }
+            else if (n == 6) { // take out 3 and 5
+                toneGenRoot.removeNote(octave);
+                toneGenRoot.removeNote(third);
+            }
+            printf("!!!");
         }
         
         // get root tone into buffer

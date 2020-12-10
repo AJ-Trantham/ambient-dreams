@@ -1,6 +1,8 @@
 
 #include "VoltronToneGenerator.h"
 #include "Note.h"
+#include <algorithm>
+
 
 /*
 * A Tone generator will generate a sine wave.
@@ -27,10 +29,24 @@ void VoltronToneGenerator::removeNote(double hz) {
     }
 }
 
+int VoltronToneGenerator::size() {
+    return (int)notes.size();
+}
+
+
 void VoltronToneGenerator::clearTones() {
     notes.clear();
 }
 
+//bool VoltronToneGenerator::isNoteInList(Note* notePtr) {
+//    int size = (int)notes.size();
+//    for (int i = 0; i < size; i++) {
+//        if (std::count(notes.begin(), notes.end(), notePtr)) {
+//
+//        }
+//    }
+//    return true;
+//}
 
 void VoltronToneGenerator::fillBufferWithTone(juce::AudioBuffer<float>& buffer) {
     
