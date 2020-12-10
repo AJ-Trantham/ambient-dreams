@@ -115,7 +115,7 @@ void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
 {
     Reverb::Parameters reverbParameters;
     
-    if (onOffState)
+    if (pluginOnOffState)
     {
         float r = rSize;
         // we only want to change notes when a new frequency is slected
@@ -136,6 +136,8 @@ void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
         // get root tone into buffer
         toneGenRoot.fillBufferWithTone(buffer);
 
+
+
         // apply effects here
 
         // do delay
@@ -153,21 +155,30 @@ void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
         writePosition %= delayBufferLength;
         // end delay
 
-        reverbParameters.roomSize = r;
-        reverbParameters.wetLevel = wet;
-        reverbParameters.dryLevel = dry;
-        reverbParameters.damping = damping;
-        printf("Room Size value %f ", reverbParameters.roomSize);
-        printf("wet level %f\n ", reverbParameters.wetLevel);
-        printf("damping %f \n", reverbParameters.damping);
-        printf("dry level %f \n", reverbParameters.dryLevel);
+   if (reverbOnOffState)
+        {
+            reverbParameters.roomSize = r;
+            reverbParameters.wetLevel = wet;
+            reverbParameters.dryLevel = dry;
+            reverbParameters.damping = damping;
+            printf("Room Size value %f ", reverbParameters.roomSize);
+            printf("wet level %f\n ", reverbParameters.wetLevel);
+            printf("damping %f \n", reverbParameters.damping);
+            printf("dry level %f \n", reverbParameters.dryLevel);
 
-        reverb.setParameters(reverbParameters);
+            reverb.setParameters(reverbParameters);
+
+            if (getMainBusNumOutputChannels() == 1)
+                reverb.processMono(buffer.getWritePointer(0), buffer.getNumSamples());
+            else if (getMainBusNumOutputChannels() == 2)
+                reverb.processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
+        
 
         if (getMainBusNumOutputChannels() == 1)
             reverb.processMono(buffer.getWritePointer(0), buffer.getNumSamples());
         else if (getMainBusNumOutputChannels() == 2)
             reverb.processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
+           }
     }
 }
 

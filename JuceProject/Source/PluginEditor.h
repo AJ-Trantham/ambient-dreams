@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "OnOffButton.h"
 
 //==============================================================================
 /**
@@ -90,9 +91,14 @@ public:
         audioProcessor.rootFrequencyValue = freq;
     }
 
-    void onOffSwitchToggled()
+    void pluginOnOffSwitchToggled()
     {
-        audioProcessor.onOffState = onOff.getToggleState();
+        audioProcessor.pluginOnOffState = pluginOnOff.getToggleState();
+    }
+
+    void reverbOnOffSwitchToggled()
+    {
+        audioProcessor.reverbOnOffState = reverbOnOff.getToggleState();
     }
     
 
@@ -102,8 +108,10 @@ private:
     // access the processor object that created it.
     VoltronAudioProcessor &audioProcessor;
 
-    ComboBox keyMenu;
-    ToggleButton onOff;
 
+    ComboBox keyMenu;
+    OnOffButton pluginOnOff;
+    OnOffButton reverbOnOff;
+    
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NewProjectAudioProcessorEditor)
 };

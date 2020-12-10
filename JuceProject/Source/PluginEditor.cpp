@@ -18,7 +18,8 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (VoltronAudioProc
     if (!audioProcessor.startup)
     {
         audioProcessor.rootFrequencyValue = 0;
-        audioProcessor.onOffState = false;
+        audioProcessor.pluginOnOffState = false;
+        audioProcessor.reverbOnOffState = false;
         audioProcessor.startup = true;
     }
 
@@ -97,9 +98,13 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (VoltronAudioProc
 
     addAndMakeVisible(&keyMenu);
 
-    addAndMakeVisible(&onOff);
-    onOff.setButtonText("On/Off");
-    onOff.onClick = [this] { onOffSwitchToggled(); };
+    addAndMakeVisible(&pluginOnOff);
+    pluginOnOff.setButtonText("On/Off");
+    pluginOnOff.onClick = [this] { pluginOnOffSwitchToggled(); };
+
+    addAndMakeVisible(&reverbOnOff);
+    reverbOnOff.setButtonText("On/Off");
+    reverbOnOff.onClick = [this] { reverbOnOffSwitchToggled(); };
 
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -113,7 +118,6 @@ NewProjectAudioProcessorEditor::~NewProjectAudioProcessorEditor()
 //==============================================================================
 void NewProjectAudioProcessorEditor::paint (juce::Graphics& g)
 {
-   
     // (Our component is opaque, so we must completely fill the background with a solid colour)
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
     
@@ -121,37 +125,40 @@ void NewProjectAudioProcessorEditor::paint (juce::Graphics& g)
     bgImage = juce::ImageCache::getFromMemory(BinaryData::nightsky_jpg, BinaryData::nightsky_jpgSize);
     g.drawImage(bgImage, 0, 0, getWidth(), getHeight(), 0, 0, bgImage.getWidth(), bgImage.getHeight());
     g.setColour (juce::Colours::white);
-    g.setFont (15.0f);
-    g.drawText("Noisier", 425, 500, 75, 20, juce::Justification::centredRight);
-    //g.drawFittedText ("Noisier", getLocalBounds(), juce::Justification::centred, 1);
+    g.setFont (35.0f);
+    g.drawText("NÔISIER", 340, 535, 175, 25, juce::Justification::centredRight);
     g.setColour (juce::Colours::black);
     g.setOpacity(.5);
     // | (60) 150 (60) 150 (60) 150 (60) 150 (60) |
-    g.fillRect(60, 150, 150, 300);
-    g.fillRect(270, 150, 150, 300);
-    g.fillRect(490, 150, 150, 300);
-    g.fillRect(700, 150, 150, 300);
+    g.fillRect(60, 150, 150, 350);
+    g.fillRect(270, 150, 150, 350);
+    g.fillRect(490, 150, 150, 350);
+    g.fillRect(700, 150, 150, 350);
     g.setColour (juce::Colours::white);
-    g.drawRect(60, 150, 150, 300);
-    g.drawRect(270, 150, 150, 300);
-    g.drawRect(490, 150, 150, 300);
-    g.drawRect(700, 150, 150, 300);
+    g.drawRect(60, 150, 150, 350);
+    g.drawRect(270, 150, 150, 350);
+    g.drawRect(490, 150, 150, 350);
+    g.drawRect(700, 150, 150, 350);
     g.setFont (25.0f);
     g.drawText("Reverb", 660, 55, 150,150, juce::Justification::centredRight);
+    g.setFont(17.0f);
+    g.drawText("Plugin On/Off", 0, 90, 250, 20, juce::Justification::centred);
+    g.setFont(15.0f);
+    g.drawText("Reverb On/Off", 648, 397, 250, 100, juce::Justification::centred);
 }
 
 void NewProjectAudioProcessorEditor::resized()
 {
     juce::Rectangle<int> area = getLocalBounds().reduced(40);
     keyMenu.setBounds(area.removeFromTop(20));
-    onOff.setBoundsRelative(0.05, 0.10, 0.1, 0.1);
+    pluginOnOff.setBoundsRelative(0.05, 0.15, 0.029, 0.041);
     auto sliderLeft = 120;
     durationSlider.setBounds(sliderLeft, 50, getWidth() - sliderLeft - 10, 20);
     dryLevelSlider.setBoundsRelative(0.81, 0.285, 0.1, 0.1);
     wetLevelSlider.setBoundsRelative(0.81, 0.405, 0.1, 0.1);
     dampingSlider.setBoundsRelative(0.81, 0.525, 0.1, 0.1);
     roomSizeSlider.setBoundsRelative(0.81, 0.645, 0.1, 0.1);
+    reverbOnOff.setBoundsRelative(0.848, 0.765, 0.029, 0.041);
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
 }
-
