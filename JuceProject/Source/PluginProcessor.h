@@ -55,9 +55,12 @@ public:
     public: float dry=0.5;
     public: float damping=0.5;
     public: float rootFrequencyValue;
+    public: int delayLength=0;
+    public: float startGain=.5;
     public: VoltronToneGenerator toneGenRoot;
     public: bool pluginOnOffState = false;
     public: bool reverbOnOffState = false;
+    public: bool delayOnOffState = false;
     public: bool startup = false;
 
     //==============================================================================

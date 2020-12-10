@@ -36,12 +36,19 @@ public:
     juce::Slider durationSlider;
     juce::Label  durationLabel;
     
+    juce::Slider delayLengthSlider;
+    juce::Label  delayLengthLabel;
+    juce::Slider gainStartSlider;
+    juce::Label  gainStarthLabel;
+    
     void sliderValueChanged(juce::Slider* slider) override
     {
         audioProcessor.rSize = roomSizeSlider.getValue();
         audioProcessor.wet = wetLevelSlider.getValue();
         audioProcessor.dry = dryLevelSlider.getValue();
         audioProcessor.damping = dampingSlider.getValue();
+        audioProcessor.delayLength = delayLengthSlider.getValue();
+        audioProcessor.startGain= gainStartSlider.getValue();
      }
     
     void styleMenuChanged()
@@ -100,6 +107,11 @@ public:
     {
         audioProcessor.reverbOnOffState = reverbOnOff.getToggleState();
     }
+    void delayOnOffSwitchToggled()
+    {
+        audioProcessor.delayOnOffState = delayOnOff.getToggleState();
+    }
+    
     
 
 private:
@@ -112,6 +124,7 @@ private:
     ComboBox keyMenu;
     OnOffButton pluginOnOff;
     OnOffButton reverbOnOff;
+    OnOffButton delayOnOff;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NewProjectAudioProcessorEditor)
 };

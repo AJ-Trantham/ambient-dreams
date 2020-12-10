@@ -79,6 +79,33 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (VoltronAudioProc
     dampingLabel.setText("Damping", juce::dontSendNotification);
     dampingLabel.attachToComponent(&dampingSlider, false);
     
+    addAndMakeVisible(delayLengthSlider);
+    delayLengthSlider.setSliderStyle(Slider::SliderStyle::Rotary);
+    delayLengthSlider.setRange(0,2000);
+    delayLengthSlider.setTextValueSuffix(" ms");
+    delayLengthSlider.setValue(0);
+    delayLengthSlider.setTextBoxStyle(Slider::NoTextBox,true, 60, 15);
+    delayLengthSlider.setPopupDisplayEnabled( true,false,NULL,2000);
+    delayLengthSlider.setNumDecimalPlacesToDisplay(3);
+    delayLengthSlider.addListener(this);
+    delayLengthLabel.setJustificationType(Justification::centredBottom);
+    delayLengthLabel.setText("Delay Length", juce::dontSendNotification);
+    delayLengthLabel.attachToComponent(&delayLengthSlider, false);
+    
+    
+    addAndMakeVisible(gainStartSlider);
+    gainStartSlider.setSliderStyle(Slider::SliderStyle::Rotary);
+    gainStartSlider.setRange(.01,1);
+    gainStartSlider.setTextValueSuffix(" %");
+    gainStartSlider.setValue(.5);
+    gainStartSlider.setTextBoxStyle(Slider::NoTextBox,true, 60, 15);
+    gainStartSlider.setPopupDisplayEnabled( true,false,NULL,2000);
+    gainStartSlider.setNumDecimalPlacesToDisplay(3);
+    gainStartSlider.addListener(this);
+    gainStarthLabel.setJustificationType(Justification::centredBottom);
+    gainStarthLabel.setText("Delay Level", juce::dontSendNotification);
+    gainStarthLabel.attachToComponent(&gainStartSlider, false);
+    
     keyMenu.addItem ("A", 'A');
     keyMenu.addItem ("A#", 'a');
     keyMenu.addItem ("B", 'B');
@@ -105,6 +132,10 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (VoltronAudioProc
     addAndMakeVisible(&reverbOnOff);
     reverbOnOff.setButtonText("On/Off");
     reverbOnOff.onClick = [this] { reverbOnOffSwitchToggled(); };
+    
+    addAndMakeVisible(&delayOnOff);
+    delayOnOff.setButtonText("On/Off");
+    delayOnOff.onClick = [this] { delayOnOffSwitchToggled(); };
 
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
@@ -141,10 +172,12 @@ void NewProjectAudioProcessorEditor::paint (juce::Graphics& g)
     g.drawRect(700, 150, 150, 350);
     g.setFont (25.0f);
     g.drawText("Reverb", 660, 55, 150,150, juce::Justification::centredRight);
+    g.drawText("Delay", 445, 55, 150,150, juce::Justification::centredRight);
     g.setFont(17.0f);
     g.drawText("Plugin On/Off", 0, 90, 250, 20, juce::Justification::centred);
     g.setFont(15.0f);
-    g.drawText("Reverb On/Off", 648, 397, 250, 100, juce::Justification::centred);
+    g.drawText("On/Off", 653, 397, 250, 100, juce::Justification::centred);
+    g.drawText("On/Off", 440, 397, 250, 100, juce::Justification::centred);
 }
 
 void NewProjectAudioProcessorEditor::resized()
@@ -159,6 +192,9 @@ void NewProjectAudioProcessorEditor::resized()
     dampingSlider.setBoundsRelative(0.81, 0.525, 0.1, 0.1);
     roomSizeSlider.setBoundsRelative(0.81, 0.645, 0.1, 0.1);
     reverbOnOff.setBoundsRelative(0.848, 0.765, 0.029, 0.041);
+    delayLengthSlider.setBoundsRelative(0.58, 0.36, 0.1, 0.1);
+    gainStartSlider.setBoundsRelative(0.58, 0.59, 0.1, 0.1);
+    delayOnOff.setBoundsRelative(0.615, 0.765, 0.029, 0.041);
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
 }

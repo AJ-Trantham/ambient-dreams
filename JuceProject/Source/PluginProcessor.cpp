@@ -178,21 +178,25 @@ void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
 
         // apply effects here
 
+        if(delayOnOffState){
+        printf(" Check if entered if statment for delay");
         // do delay
         const int bufferLength = buffer.getNumSamples();
         const int delayBufferLength = delayBuffer.getNumSamples();
 
         const float* bufferData = buffer.getReadPointer(0);
         const float* delayBufferData = delayBuffer.getReadPointer(0);
-
-        writeToDelayBuffer(buffer, 0, writePosition, .8, .8, bufferData, delayBufferData, bufferLength, delayBufferLength);
-        readFromDelayBuffer(buffer, 0, writePosition, .8, .8, bufferData, delayBufferData, bufferLength, delayBufferLength);
+        float gainStart =startGain;
+        float gainEnd= .01;
+        printf(" Gain Start %f\n ", gainStart);
+        writeToDelayBuffer(buffer, 0, writePosition, gainStart, gainEnd, bufferData, delayBufferData, bufferLength, delayBufferLength);
+        readFromDelayBuffer(buffer, 0, writePosition, gainStart, gainEnd, bufferData, delayBufferData, bufferLength, delayBufferLength);
 
         // update delay buffer positions
         writePosition += bufferLength;
         writePosition %= delayBufferLength;
         // end delay
-
+        }
    if (reverbOnOffState)
         {
             reverbParameters.roomSize = r;
@@ -206,24 +210,23 @@ void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
 
             reverb.setParameters(reverbParameters);
 
-            if (getMainBusNumOutputChannels() == 1)
-                reverb.processMono(buffer.getWritePointer(0), buffer.getNumSamples());
-            else if (getMainBusNumOutputChannels() == 2)
-                reverb.processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
         
-
+        }
         if (getMainBusNumOutputChannels() == 1)
             reverb.processMono(buffer.getWritePointer(0), buffer.getNumSamples());
         else if (getMainBusNumOutputChannels() == 2)
             reverb.processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
-           }
+       
+            
+        
     }
 }
 
 void VoltronAudioProcessor::readFromDelayBuffer(AudioSampleBuffer& buffer, const int channelIn, const int writePos, float startGain, float endGain,
     const float* bufferData, const float* delayBufferData, const int bufferLength, const int delayBufferLength) 
 {
-    int delayTime = 1500; //  This is in ms 
+    int delayTime = delayLength; //  This is in ms
+    printf("delay time  %d \n", delayTime);
     //  TODO: change later John says its not rocket science
         
     const int readPosition = static_cast<int> (delayBufferLength + writePosition - (sampleRate * delayTime / 1000)) % delayBufferLength; // this lets us access the buffer backwards past 0
