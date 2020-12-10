@@ -168,7 +168,7 @@ void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
                 toneGenRoot.removeNote(octave);
                 toneGenRoot.removeNote(third);
             }
-            printf("!!!");
+            //printf("!!!");
         }
         
         // get root tone into buffer
@@ -210,14 +210,11 @@ void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
 
             reverb.setParameters(reverbParameters);
 
-        
+            if (getMainBusNumOutputChannels() == 1)
+                reverb.processMono(buffer.getWritePointer(0), buffer.getNumSamples());
+            else if (getMainBusNumOutputChannels() == 2)
+                reverb.processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
         }
-        if (getMainBusNumOutputChannels() == 1)
-            reverb.processMono(buffer.getWritePointer(0), buffer.getNumSamples());
-        else if (getMainBusNumOutputChannels() == 2)
-            reverb.processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
-       
-            
         
     }
 }
