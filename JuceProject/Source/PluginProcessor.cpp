@@ -81,6 +81,18 @@ void VoltronAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBloc
 {
     this->sampleRate = sampleRate; // this is essential as we need the sample rate when adding notes in the processBlock()
     reverb.setSampleRate(sampleRate);
+
+    // set up delay size, samples per block is bonus time
+    int numSeconds = 2;
+    int delayBufferSize = numSeconds * (sampleRate + samplesPerBlock);
+
+    // 1 channel which is our generated audio
+    delayBuffer.setSize(1, delayBufferSize); 
+    delayBuffer.clear();
+
+    expectedReadPosition = -1; // ??? might need to be 0
+    writePosition = 0;
+    readPosition = 0;
 }
 
 void VoltronAudioProcessor::releaseResources()
@@ -121,7 +133,25 @@ void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
             prevRootFreq = freq;
         }
         
+        // get root tone into buffer
         toneGenRoot.fillBufferWithTone(buffer);
+
+        // apply effects here
+
+        // do delay
+        const int bufferLength = buffer.getNumSamples();
+        const int delayBufferLength = delayBuffer.getNumSamples();
+
+        const float* bufferData = buffer.getReadPointer(0);
+        const float* delayBufferData = delayBuffer.getReadPointer(0);
+
+        writeToDelayBuffer(buffer, 0, writePosition, .8, .8, bufferData, delayBufferData, bufferLength, delayBufferLength);
+        readFromDelayBuffer(buffer, 0, writePosition, .8, .8, bufferData, delayBufferData, bufferLength, delayBufferLength);
+
+        // update delay buffer positions
+        writePosition += bufferLength;
+        writePosition %= delayBufferLength;
+        // end delay
 
         reverbParameters.roomSize = r;
         reverbParameters.wetLevel = wet;
@@ -138,6 +168,39 @@ void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
             reverb.processMono(buffer.getWritePointer(0), buffer.getNumSamples());
         else if (getMainBusNumOutputChannels() == 2)
             reverb.processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
+    }
+}
+
+void VoltronAudioProcessor::readFromDelayBuffer(AudioSampleBuffer& buffer, const int channelIn, const int writePos, float startGain, float endGain,
+    const float* bufferData, const float* delayBufferData, const int bufferLength, const int delayBufferLength) 
+{
+    int delayTime = 1500; //  This is in ms 
+    //  TODO: change later John says its not rocket science
+        
+    const int readPosition = static_cast<int> (delayBufferLength + writePosition - (sampleRate * delayTime / 1000)) % delayBufferLength; // this lets us access the buffer backwards past 0
+
+    if (delayBufferLength > bufferLength + readPosition) {
+        buffer.addFrom(channelIn, 0, delayBufferData + readPosition, bufferLength);
+    }
+    else {
+        const int bufferRemaining = delayBufferLength - readPosition;
+        buffer.addFrom(channelIn, 0, delayBufferData + readPosition, bufferRemaining);
+        buffer.addFrom(channelIn, 0, delayBufferData + readPosition, bufferLength-bufferRemaining);
+    }
+
+}
+
+void VoltronAudioProcessor::writeToDelayBuffer(AudioSampleBuffer& buffer, const int channelIn, const int writePos, float startGain, float endGain,
+    const float* bufferData, const float* delayBufferData, const int bufferLength, const int delayBufferLength)
+{
+    // copy data from main buffer delay buffer
+    if (delayBufferLength > bufferLength + writePosition) {
+        delayBuffer.copyFromWithRamp(channelIn, writePosition, bufferData, bufferLength, startGain, endGain);
+    }
+    else {
+        const int bufferRemaining = delayBufferLength - writePosition; // the space left in our buffer
+        delayBuffer.copyFromWithRamp(channelIn, writePosition, bufferData, bufferRemaining, startGain, endGain);
+        delayBuffer.copyFromWithRamp(channelIn, 0, bufferData + bufferRemaining, bufferLength - bufferRemaining, startGain, endGain);
     }
 }
 

@@ -46,6 +46,10 @@ public:
     bool isMidiEffect() const override;
     double getTailLengthSeconds() const override;
     void updateAngleDelta();
+    void writeToDelayBuffer(AudioSampleBuffer& buffer, const int channelIn, const int writePos, float startGain, float endGain,
+        const float* bufferData, const float* delayBufferData, const int bufferLength, const int delayBufferLength);
+    void readFromDelayBuffer(AudioSampleBuffer& buffer, const int channelIn, const int writePos, float startGain, float endGain,
+        const float* bufferData, const float* delayBufferData, const int bufferLength, const int delayBufferLength);
     public: float rSize=0.5;
     public: float wet=0.5;
     public: float dry=0.5;
@@ -90,4 +94,8 @@ private:
     float checkValue = 1;
     double sampleRate;
     double prevRootFreq = 0.0;
+    AudioBuffer<float> delayBuffer;
+    int expectedReadPosition;
+    int writePosition;
+    int readPosition;
 };
