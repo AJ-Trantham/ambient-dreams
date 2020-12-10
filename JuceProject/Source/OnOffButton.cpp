@@ -23,17 +23,13 @@ void OnOffButton::paintButton(juce::Graphics& g, bool isMouseOverButton, bool is
 	g.setColour(juce::Colours::white);
 	g.fillEllipse(0, 0, 25, 25);
 
-	if (isButtonDown)
+	if (this->getToggleState())
 	{
 		g.setColour(juce::Colours::red);
-	}
-	else if (isMouseOverButton)
-	{
-		g.setColour(juce::Colours::red.brighter());
 	}
 	else
 	{
-		g.setColour(juce::Colours::red);
+		g.setColour(juce::Colours::red.darker());
 	}
 
 	//Ellipse
