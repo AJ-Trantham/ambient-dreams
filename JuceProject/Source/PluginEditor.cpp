@@ -81,7 +81,7 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (VoltronAudioProc
     
     addAndMakeVisible(delayLengthSlider);
     delayLengthSlider.setSliderStyle(Slider::SliderStyle::Rotary);
-    delayLengthSlider.setRange(0,2000);
+    delayLengthSlider.setRange(0,1500);
     delayLengthSlider.setTextValueSuffix(" ms");
     delayLengthSlider.setValue(0);
     delayLengthSlider.setTextBoxStyle(Slider::NoTextBox,true, 60, 15);

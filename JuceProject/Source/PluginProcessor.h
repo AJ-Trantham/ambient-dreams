@@ -50,6 +50,9 @@ public:
         const float* bufferData, const float* delayBufferData, const int bufferLength, const int delayBufferLength);
     void readFromDelayBuffer(AudioSampleBuffer& buffer, const int channelIn, const int writePos, float startGain, float endGain,
         const float* bufferData, const float* delayBufferData, const int bufferLength, const int delayBufferLength);
+
+    void feedbackDelay(const int channel, float startGain, float endGain,
+        const float* dryBuffer, int bufferLength, int delayBufferLength);
     public: float rSize=0.5;
     public: float wet=0.5;
     public: float dry=0.5;
