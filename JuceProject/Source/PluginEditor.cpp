@@ -81,7 +81,9 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (VoltronAudioProc
     
     addAndMakeVisible(delayLengthSlider);
     delayLengthSlider.setSliderStyle(Slider::SliderStyle::Rotary);
+      
     delayLengthSlider.setRange(0,1500);
+
     delayLengthSlider.setTextValueSuffix(" ms");
     delayLengthSlider.setValue(0);
     delayLengthSlider.setTextBoxStyle(Slider::NoTextBox,true, 60, 15);
@@ -157,7 +159,7 @@ void NewProjectAudioProcessorEditor::paint (juce::Graphics& g)
     g.drawImage(bgImage, 0, 0, getWidth(), getHeight(), 0, 0, bgImage.getWidth(), bgImage.getHeight());
     g.setColour (juce::Colours::white);
     g.setFont (35.0f);
-    g.drawText("NÔISIER", 340, 535, 175, 25, juce::Justification::centredRight);
+    g.drawText("NÃ”ISIER", 340, 535, 175, 25, juce::Justification::centredRight);
     g.setColour (juce::Colours::black);
     g.setOpacity(.5);
     // | (60) 150 (60) 150 (60) 150 (60) 150 (60) |

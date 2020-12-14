@@ -53,6 +53,7 @@ public:
 
     void feedbackDelay(const int channel, float startGain, float endGain,
         const float* dryBuffer, int bufferLength, int delayBufferLength);
+
     public: float rSize=0.5;
     public: float wet=0.5;
     public: float dry=0.5;
