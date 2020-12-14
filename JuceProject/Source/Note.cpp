@@ -3,7 +3,7 @@
 /*
 * Represents a note and maintains internal values
 * which are responsible for giving the current value 
-* of the sine wave.
+* of the sine wave. 
 */
 Note::Note(double frequency, double level, double sampleRate) {
 	this->frequency = frequency;
