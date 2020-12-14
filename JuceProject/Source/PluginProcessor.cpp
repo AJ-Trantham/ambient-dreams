@@ -168,7 +168,7 @@ void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
                 toneGenRoot.removeNote(octave);
                 toneGenRoot.removeNote(third);
             }
-            printf("!!!");
+            //printf("!!!");
         }
         
         // get root tone into buffer
@@ -178,7 +178,6 @@ void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
 
         // apply effects here
 
-        if(delayOnOffState){
         printf(" Check if entered if statment for delay");
         // do delay
         const int bufferLength = buffer.getNumSamples();
@@ -186,18 +185,26 @@ void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
 
         const float* bufferData = buffer.getReadPointer(0);
         const float* delayBufferData = delayBuffer.getReadPointer(0);
-        float gainStart =startGain;
-        float gainEnd= .01;
+        
+        float gainStart = startGain;
+        float gainEnd = .01;
         printf(" Gain Start %f\n ", gainStart);
         writeToDelayBuffer(buffer, 0, writePosition, gainStart, gainEnd, bufferData, delayBufferData, bufferLength, delayBufferLength);
-        readFromDelayBuffer(buffer, 0, writePosition, gainStart, gainEnd, bufferData, delayBufferData, bufferLength, delayBufferLength);
+        
 
         // update delay buffer positions
         writePosition += bufferLength;
         writePosition %= delayBufferLength;
-        // end delay
+
+        if(delayOnOffState) {
+            
+            readFromDelayBuffer(buffer, 0, writePosition, gainStart, gainEnd, bufferData, delayBufferData, bufferLength, delayBufferLength);
+            const float* dryBuffer = buffer.getReadPointer(0);
+            feedbackDelay(0, gainStart, gainEnd, dryBuffer, bufferLength, delayBufferLength);
+        
         }
-   if (reverbOnOffState)
+
+        if (reverbOnOffState)
         {
             reverbParameters.roomSize = r;
             reverbParameters.wetLevel = wet;
@@ -210,14 +217,11 @@ void VoltronAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce
 
             reverb.setParameters(reverbParameters);
 
-        
+            if (getMainBusNumOutputChannels() == 1)
+                reverb.processMono(buffer.getWritePointer(0), buffer.getNumSamples());
+            else if (getMainBusNumOutputChannels() == 2)
+                reverb.processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
         }
-        if (getMainBusNumOutputChannels() == 1)
-            reverb.processMono(buffer.getWritePointer(0), buffer.getNumSamples());
-        else if (getMainBusNumOutputChannels() == 2)
-            reverb.processStereo(buffer.getWritePointer(0), buffer.getWritePointer(1), buffer.getNumSamples());
-       
-            
         
     }
 }
@@ -232,12 +236,12 @@ void VoltronAudioProcessor::readFromDelayBuffer(AudioSampleBuffer& buffer, const
     const int readPosition = static_cast<int> (delayBufferLength + writePosition - (sampleRate * delayTime / 1000)) % delayBufferLength; // this lets us access the buffer backwards past 0
 
     if (delayBufferLength > bufferLength + readPosition) {
-        buffer.addFrom(channelIn, 0, delayBufferData + readPosition, bufferLength);
+        buffer.copyFrom(channelIn, 0, delayBufferData + readPosition, bufferLength);
     }
     else {
         const int bufferRemaining = delayBufferLength - readPosition;
-        buffer.addFrom(channelIn, 0, delayBufferData + readPosition, bufferRemaining);
-        buffer.addFrom(channelIn, 0, delayBufferData + readPosition, bufferLength-bufferRemaining);
+        buffer.copyFrom(channelIn, 0, delayBufferData + readPosition, bufferRemaining);
+        buffer.copyFrom(channelIn, bufferRemaining, delayBufferData, bufferLength-bufferRemaining);
     }
 
 }
@@ -254,6 +258,21 @@ void VoltronAudioProcessor::writeToDelayBuffer(AudioSampleBuffer& buffer, const 
         delayBuffer.copyFromWithRamp(channelIn, writePosition, bufferData, bufferRemaining, startGain, endGain);
         delayBuffer.copyFromWithRamp(channelIn, 0, bufferData + bufferRemaining, bufferLength - bufferRemaining, startGain, endGain);
     }
+}
+
+void VoltronAudioProcessor::feedbackDelay(const int channel, float startGain, float endGain,
+    const float* dryBuffer, int bufferLength,  int delayBufferLength)
+{
+    if (delayBufferLength > bufferLength + writePosition) {
+        delayBuffer.addFromWithRamp(channel, writePosition, dryBuffer, bufferLength, startGain, endGain);
+    }
+    else {
+        const int bufferRemaining = delayBufferLength - writePosition;
+
+        delayBuffer.addFromWithRamp(channel, bufferRemaining, dryBuffer, bufferRemaining, startGain, endGain);
+        delayBuffer.addFromWithRamp(channel, 0, dryBuffer, bufferLength -bufferRemaining, startGain, endGain);
+    }
+
 }
 
 //==============================================================================
